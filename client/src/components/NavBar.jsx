@@ -1,38 +1,30 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
+import React, { Component } from "react";
+import styled from "styled-components";
 
-import Logo from './Logo'
-import Links from './Links'
+import Logo from "./Logo";
+import Links from "./Links";
 
 const Container = styled.div.attrs({
-    className: 'container',
-})``
+  className: "container",
+})``;
 
 const Nav = styled.nav.attrs({
-    className: 'navbar navbar-expand-lg navbar-dark',
+  className: "navbar navbar-expand-lg navbar-dark",
 })`
-    background-color: darkred;
-`
+  background-color: darkred;
+`;
 
 class NavBar extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            eventname: this.props.eventname
-        }
-        console.log('navbar event name: ' + this.state.eventname)
-     }
-
-    render() {
-        return (
-            <Container>
-                <Nav>
-                    <Logo />
-                    <Links eventname={this.state.eventname}/>
-                </Nav>
-            </Container>
-        )
-    }
+  render() {
+    return (
+      <Container>
+        <Nav>
+          <Logo />
+          <Links eventname={this.props.eventname} logout={this.props.logout} />
+        </Nav>
+      </Container>
+    );
+  }
 }
 
-export default NavBar
+export default NavBar;

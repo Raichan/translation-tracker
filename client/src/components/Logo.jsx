@@ -1,20 +1,20 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
+import React, { Component } from "react";
+import styled from "styled-components";
 
-import logo from '../logo.svg'
+import pokeball from "../pokeball.png"; // Source: purepng.com (CC0)
 
 const Wrapper = styled.a.attrs({
-    className: 'navbar-brand',
-})``
+  className: "navbar-brand",
+})``;
 
 class Logo extends Component {
-    render() {
-        return (
-            <Wrapper href="https://sambarros.com">
-                <img src={logo} width="50" height="50" alt="sambarros.com" />
-            </Wrapper>
-        )
-    }
+  render() {
+    return (
+      <Wrapper>
+        <img src={pokeball} width="40" height="40" alt="" />
+      </Wrapper>
+    );
+  }
 }
 
-export default Logo
+export default Logo;

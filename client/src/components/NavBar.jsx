@@ -15,12 +15,20 @@ const Nav = styled.nav.attrs({
 `
 
 class NavBar extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            eventname: this.props.eventname
+        }
+        console.log('navbar event name: ' + this.state.eventname)
+     }
+
     render() {
         return (
             <Container>
                 <Nav>
                     <Logo />
-                    <Links eventname={this.props.eventname}/>
+                    <Links eventname={this.state.eventname}/>
                 </Nav>
             </Container>
         )

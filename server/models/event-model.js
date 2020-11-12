@@ -6,8 +6,7 @@ const Event = new Schema(
         eventcode: { type: String, required: true },
         name: { type: String, required: true },
         languages: [{
-            name: { type: String, required: true },
-            order: { type: Number, required: true }
+            type: String, required: true
         }]
     },
     { timestamps: true },

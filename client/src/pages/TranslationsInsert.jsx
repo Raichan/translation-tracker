@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import api from '../api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import updateTable from './TranslationsList'
 
 import styled from 'styled-components'
 

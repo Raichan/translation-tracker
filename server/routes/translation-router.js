@@ -1,13 +1,12 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
 
-const TranslationCtrl = require('../controllers/translation-ctrl')
+const TranslationCtrl = require("../controllers/translation-ctrl");
 
-const router = express.Router()
+router.post("/", TranslationCtrl.createTranslation);
+router.put("/:id", TranslationCtrl.updateTranslation);
+router.delete("/:id", TranslationCtrl.deleteTranslation);
+router.get("/:id", TranslationCtrl.getTranslationById);
+router.get("/", TranslationCtrl.getTranslations);
 
-router.post('/translation', TranslationCtrl.createTranslation)
-router.put('/translation/:id', TranslationCtrl.updateTranslation)
-router.delete('/translation/:id', TranslationCtrl.deleteTranslation)
-router.get('/translation/:id', TranslationCtrl.getTranslationById)
-router.get('/translations', TranslationCtrl.getTranslations)
-
-module.exports = router
+module.exports = router;

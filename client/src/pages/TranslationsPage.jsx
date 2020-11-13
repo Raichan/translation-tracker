@@ -13,14 +13,18 @@ class TranslationsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      languages: [],
       translations: [],
+      languages: [],
     };
+
     this.updateTable = this.updateTable.bind(this);
   }
 
   setLanguages = (list) => {
+    console.log(list);
+    console.log(this.state.languages);
     this.setState({ languages: list });
+    console.log(this.state.languages);
   };
 
   setTranslations = (list) => {
@@ -30,8 +34,13 @@ class TranslationsPage extends Component {
   componentDidMount = async () => {
     // TODO get translations by event code
     await api.getAllTranslations().then((translations) => {
+      let storageLanguages = [];
+      if (localStorage.getItem("languages") !== null) {
+        storageLanguages = localStorage.getItem("languages").split(",");
+      }
       let languageList = [];
-      this.props.languages.forEach((item, i) => {
+
+      storageLanguages.forEach((item, i) => {
         let translationList = translations.data.data.filter(
           (t) => t.language === item
         );

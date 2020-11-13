@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import api from "../api";
 
 import styled from "styled-components";
@@ -30,10 +31,11 @@ const Button = styled.button.attrs({
   margin: 15px 15px 15px 5px;
 `;
 
-const CancelButton = styled.a.attrs({
+const CancelButton = styled(Link).attrs({
   className: `btn btn-danger`,
 })`
   margin: 15px 15px 15px 5px;
+  text-decoration-color: none;
 `;
 
 class EventInfo extends Component {
@@ -42,9 +44,12 @@ class EventInfo extends Component {
 
     this.state = {
       newevent: this.props.eventcode === "" ? true : false,
-      eventcode: this.props.eventcode || "",
-      eventname: this.props.eventname || "",
-      languagelist: this.props.languages.join(", ") || "",
+      eventcode: localStorage.getItem("eventcode") || "",
+      eventname: localStorage.getItem("eventname") || "",
+      languagelist:
+        localStorage.getItem("languages") !== null
+          ? localStorage.getItem("languages").replaceAll(",", ", ")
+          : "",
     };
   }
 
@@ -74,9 +79,11 @@ class EventInfo extends Component {
         window.location.href = "/";
       });
     } else {
-      await api.updateEventById(this.state.eventcode, payload).then((res) => {
-        window.location.href = "/translations";
-      });
+      await api
+        .updateEventById("5fad2c8d2deab00738abe62f", payload)
+        .then((res) => {
+          window.location.href = "/translations";
+        });
     }
   };
 
@@ -85,7 +92,6 @@ class EventInfo extends Component {
     return (
       <Wrapper>
         <Title>Edit event information</Title>
-        {this.state.newevent ? "true" : "false"}
         <Label>Event code: </Label>
         <InputText
           type="text"
@@ -105,7 +111,7 @@ class EventInfo extends Component {
           onChange={this.handleChangeLanguages}
         />
         <Button onClick={this.handleEditEvent}>Save event</Button>
-        <CancelButton href={this.state.newevent ? "/" : "/translations"}>
+        <CancelButton to={this.state.newevent ? "/" : "/translations"}>
           Cancel
         </CancelButton>
       </Wrapper>

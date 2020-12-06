@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import Logo from "./Logo";
@@ -14,17 +14,15 @@ const Nav = styled.nav.attrs({
   background-color: darkred;
 `;
 
-class NavBar extends Component {
-  render() {
-    return (
-      <Container>
-        <Nav>
-          <Logo />
-          <Links eventname={this.props.eventname} logout={this.props.logout} />
-        </Nav>
-      </Container>
-    );
-  }
-}
+const NavBar = ({ eventname, logout }) => {
+  return (
+    <Container>
+      <Nav>
+        <Logo />
+        <Links eventname={eventname} logout={logout} />
+      </Nav>
+    </Container>
+  );
+};
 
 export default NavBar;

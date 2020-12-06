@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import api from "../api";
+import React from "react";
+import apis from "../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
@@ -23,64 +23,62 @@ const TotalButton = styled.button`
   margin-right: 5px;
 `;
 
-class InsertButton extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      eventcode: this.props.eventcode,
-      language: this.props.language,
-      total: this.props.total,
+const TranslationsInsert = ({
+  eventid,
+  languages,
+  translations,
+  updateTotal,
+  addToLog,
+}) => {
+  const InsertButton = ({ language, total }) => {
+    const addTranslation = () => {
+      const payload = { eventid, language };
+
+      apis
+        .insertTranslation(payload)
+        .then((res) => {
+          updateTotal(language, 1);
+          console.log(res);
+          addToLog(res.data.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     };
-  }
 
-  addTranslation = async () => {
-    const eventcode = this.state.eventcode;
-    const language = this.state.language;
-    const payload = { eventcode, language };
-
-    await api.insertTranslation(payload).then((res) => {
-      this.setState((prevState) => {
-        return { total: prevState.total + 1 };
-      });
-      this.props.updateTable();
-    });
-  };
-
-  render() {
     return (
       <LanguageButtons>
         <div className="btn-group" role="group" aria-label="Language">
           <NameButton type="button" className="btn btn-outline-primary">
-            {this.state.language}
+            {language}
           </NameButton>
           <TotalButton type="button" className="btn btn-outline-primary">
-            {this.state.total}
+            {total}
           </TotalButton>
         </div>
         <button
           type="button"
           className="btn btn-success"
-          onClick={this.addTranslation.bind(this)}
+          onClick={() => addTranslation()}
         >
           <FontAwesomeIcon icon={faPlus} />
         </button>
       </LanguageButtons>
     );
-  }
-}
+  };
 
-class TranslationsInsert extends Component {
-  render() {
-    const languagelist = this.props.languages.map((lang) => (
-      <InsertButton
-        eventcode={this.props.eventcode}
-        language={lang.name}
-        total={lang.total}
-        updateTable={this.props.updateTable}
-      />
-    ));
-    return <ButtonsComponent>{languagelist}</ButtonsComponent>;
-  }
-}
+  return (
+    <ButtonsComponent>
+      {languages.map((lang) => (
+        <InsertButton
+          key={lang}
+          eventid={eventid}
+          language={lang}
+          total={translations[lang]}
+        />
+      ))}
+    </ButtonsComponent>
+  );
+};
 
 export default TranslationsInsert;

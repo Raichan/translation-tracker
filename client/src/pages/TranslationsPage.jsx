@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import TranslationsInsert from "./TranslationsInsert";
 import TranslationsList from "./TranslationsList";
-import api from "../api";
+import apis from "../api";
 
 import styled from "styled-components";
 
@@ -9,74 +9,66 @@ const Wrapper = styled.div`
   padding: 20px 200px 40px 200px;
 `;
 
-class TranslationsPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      translations: [],
-      languages: [],
-    };
+const TranslationsPage = ({
+  eventid,
+  languages,
+  translations,
+  setTranslations,
+}) => {
+  const [log, setLog] = useState([]);
 
-    this.updateTable = this.updateTable.bind(this);
-  }
+  useEffect(() => {
+    console.log(translations);
+  }, [translations]);
 
-  setLanguages = (list) => {
-    console.log(list);
-    console.log(this.state.languages);
-    this.setState({ languages: list });
-    console.log(this.state.languages);
-  };
-
-  setTranslations = (list) => {
-    this.setState({ translations: list });
-  };
-
-  componentDidMount = async () => {
-    // TODO get translations by event code
-    await api.getAllTranslations().then((translations) => {
-      let storageLanguages = [];
-      if (localStorage.getItem("languages") !== null) {
-        storageLanguages = localStorage.getItem("languages").split(",");
-      }
-      let languageList = [];
-
-      storageLanguages.forEach((item, i) => {
-        let translationList = translations.data.data.filter(
-          (t) => t.language === item
-        );
-        let language = {
-          name: item,
-          total: translationList.length,
-        };
-        languageList.push(language);
+  // On load, fetch the log
+  useEffect(() => {
+    console.log("Fetching the log");
+    const payload = { n: 10 };
+    apis
+      .getLatest(eventid, payload)
+      .then((res) => {
+        console.log(res.data.data);
+        setLog(res.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
       });
-      this.setLanguages(languageList);
-      this.setTranslations(translations.data.data);
-    });
+  }, [eventid]);
+
+  // Add x to (or deduct from, if x is negative) the language total
+  const updateTotal = (language, x) => {
+    let newTranslations = { ...translations };
+    newTranslations[language] += x;
+    setTranslations(newTranslations);
   };
 
-  updateTable() {
-    api.getAllTranslations().then((translations) => {
-      console.log(translations.data.data.length);
-      this.setTranslations(translations.data.data);
-    });
-  }
+  const addToLog = (translation) => {
+    const newLog = [translation, ...log]; // The newest translation goes first
+    setLog(newLog);
+  };
 
-  render() {
-    return (
-      <Wrapper>
-        <TranslationsInsert
-          eventcode={this.props.eventcode}
-          languages={this.state.languages}
-          updateTable={this.updateTable}
-        />
-        <TranslationsList
-          translations={this.props.translations}
-          updateTable={this.updateTable}
-        />
-      </Wrapper>
-    );
-  }
-}
+  const removeFromLog = (id) => {
+    const newLog = log.filter((l) => l._id !== id);
+    setLog(newLog);
+  };
+
+  return (
+    <Wrapper>
+      <TranslationsInsert
+        eventid={eventid}
+        languages={languages}
+        translations={translations}
+        updateTotal={updateTotal}
+        addToLog={addToLog}
+      />
+      <TranslationsList
+        log={log}
+        removeFromLog={removeFromLog}
+        updateTotal={updateTotal}
+      />
+    </Wrapper>
+  );
+};
 
 export default TranslationsPage;

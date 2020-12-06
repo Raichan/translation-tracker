@@ -11,6 +11,9 @@ export const updateTranslationById = (id, payload) =>
   api.put(`/translations/${id}`, payload);
 export const deleteTranslationById = (id) => api.delete(`/translations/${id}`);
 export const getTranslationById = (id) => api.get(`/translations/${id}`);
+export const getLanguageTotals = (id) => api.get(`/translations/totals/${id}`); // Event id
+export const getLatest = (id, payload) =>
+  api.post(`/translations/latest/${id}`, payload);
 
 export const insertEvent = (payload) => api.post(`/events`, payload);
 export const getAllEvents = () => api.get(`/events`);
@@ -26,6 +29,8 @@ const apis = {
   updateTranslationById,
   deleteTranslationById,
   getTranslationById,
+  getLanguageTotals,
+  getLatest,
   insertEvent,
   getAllEvents,
   updateEventById,

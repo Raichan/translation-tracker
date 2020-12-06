@@ -1,106 +1,77 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { NavBar } from "../components";
 import { TranslationsPage, Login, EventInfo } from "../pages";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import apis from "../api";
 
-/*function eventSet() {
-  // ...
-}
+const App = () => {
+  const [eventid, setEventid] = useState("");
+  const [eventname, setEventname] = useState("");
+  const [languages, setLanguages] = useState([]);
+  const [translations, setTranslations] = useState({});
 
-function checkEvent(nextState, replace) {
-  if (!eventSet()) {
-    replace({
-      pathname: "/",
-    });
-  }
-}*/
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      eventcode: localStorage.getItem("eventcode") || "",
-      eventname: localStorage.getItem("eventname") || "",
-      languages: [],
-    };
-    let languagelist = localStorage.getItem("languages");
-    if (languagelist !== null) {
-      this.setLanguages(languagelist.split(","));
-    }
-
-    this.setCode = this.setCode.bind(this);
-    this.setName = this.setName.bind(this);
-    this.setLanguages = this.setLanguages.bind(this);
-  }
-
-  setCode = (code) => {
-    this.setState({ eventcode: code });
-    localStorage.setItem("eventcode", code);
+  const updateState = (id, name, langs) => {
+    setEventid(id);
+    setEventname(name);
+    setLanguages(langs);
   };
 
-  setName = (name) => {
-    this.setState({ eventname: name });
-    localStorage.setItem("eventname", name);
+  const updateTotals = (id, languageList) => {
+    console.log("Getting language totals");
+    apis
+      .getLanguageTotals(id)
+      .then((res) => {
+        let totals = res.data.data;
+        let newTranslations = {};
+        languageList.forEach((l) => {
+          newTranslations[l] = l in totals ? totals[l] : 0;
+        });
+        setTranslations(newTranslations);
+      })
+      .catch((err) => console.error(err));
   };
 
-  setLanguages = (list) => {
-    this.setState({ languages: list });
-    localStorage.setItem("languages", list.join(","));
+  const logout = () => {
+    updateState("", "", []);
+    setTranslations({});
   };
 
-  logout = () => {
-    localStorage.clear();
-    this.setState({ id: "", eventcode: "", eventname: "", translations: [] });
-  };
-
-  render() {
-    return (
-      <Router>
-        <NavBar eventname={this.state.eventname} logout={this.logout} />
-        <Switch>
-          <Route
-            path="/"
-            exact
-            render={(props) => (
-              <Login
-                {...props}
-                setCode={this.setCode}
-                setName={this.setName}
-                setLanguages={this.setLanguages}
-              />
-            )}
-          />
-          <Route
-            path="/translations"
-            //onEnter={checkEvent}
-            exact
-            render={(props) => (
-              <TranslationsPage
-                {...props}
-                eventcode={this.state.eventcode}
-                languages={this.state.languages}
-              />
-            )}
-          />
-          <Route
-            path="/eventinfo"
-            exact
-            render={(props) => (
-              <EventInfo
-                {...props}
-                eventcode={this.state.eventcode}
-                eventname={this.state.eventname}
-                languages={this.state.languages}
-              />
-            )}
-          />
-        </Switch>
-      </Router>
-    );
-  }
-}
+  return (
+    <Router>
+      <NavBar eventname={eventname} logout={logout} />
+      <Switch>
+        <Route
+          path="/"
+          exact
+          render={() => (
+            <Login updateState={updateState} updateTotals={updateTotals} />
+          )}
+        />
+        <Route
+          path="/translations"
+          exact
+          render={() => (
+            <TranslationsPage
+              eventid={eventid}
+              languages={languages}
+              translations={translations}
+              setTranslations={setTranslations}
+            />
+          )}
+        />
+        <Route
+          path="/eventinfo"
+          exact
+          render={() => (
+            <EventInfo eventid={eventid} updateState={updateState} />
+          )}
+        />
+      </Switch>
+    </Router>
+  );
+};
 
 export default App;

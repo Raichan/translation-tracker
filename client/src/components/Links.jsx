@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -23,40 +23,28 @@ const Logout = styled.div`
   margin-left: auto;
 `;
 
-class Links extends Component {
-  render() {
-    let logout = "";
-    if (this.props.eventname !== "") {
-      logout = (
-        <Logout>
-          <Link
-            to="/"
-            onClick={() => {
-              this.props.logout();
-            }}
-          >
-            <NavbarItem>
-              <FontAwesomeIcon icon={faSignOutAlt} title="Log out" />
-            </NavbarItem>
-          </Link>
-        </Logout>
-      );
-    }
+const Links = ({ eventname, logout }) => {
+  let logoutLink = (
+    <Logout>
+      <Link to="/" onClick={() => logout()}>
+        <NavbarItem>
+          <FontAwesomeIcon icon={faSignOutAlt} title="Log out" />
+        </NavbarItem>
+      </Link>
+    </Logout>
+  );
 
-    return (
-      <Fragment>
-        <Link to="/" className="navbar-brand">
-          Pokémon Tournament Translation Tracker
-        </Link>
-        <Fragment>
-          <NavbarItem>
-            <EventName to="/eventinfo">{this.props.eventname}</EventName>
-          </NavbarItem>
-          {logout}
-        </Fragment>
-      </Fragment>
-    );
-  }
-}
+  return (
+    <Fragment>
+      <Link to="/" className="navbar-brand">
+        Pokémon Tournament Translation Tracker
+      </Link>
+      <NavbarItem>
+        <EventName to="/eventinfo">{eventname}</EventName>
+      </NavbarItem>
+      {eventname !== "" ? logoutLink : ""}
+    </Fragment>
+  );
+};
 
 export default Links;

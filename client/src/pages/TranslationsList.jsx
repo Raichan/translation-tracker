@@ -1,157 +1,71 @@
-import React, { Component, Fragment } from "react";
-import api from "../api";
+import React from "react";
+import apis from "../api";
 import Moment from "react-moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import styled from "styled-components";
-
-const Update = styled.div`
-  color: #ef9b0f;
-  cursor: pointer;
-`;
 
 const Delete = styled.div`
   color: #ff0000;
   cursor: pointer;
 `;
 
-class UpdateTranslation extends Component {
-  updateTranslation = (event) => {
-    event.preventDefault();
+const TranslationsList = ({ log, updateTotal, removeFromLog }) => {
+  const DeleteTranslation = ({ id, language }) => {
+    const deleteTranslation = () => {
+      if (
+        window.confirm(
+          `Do you want to delete this translation (${language}) permanently?`
+        )
+      ) {
+        apis.deleteTranslationById(id).then(() => {
+          updateTotal(language, -1);
+          removeFromLog(id);
+        });
+      }
+    };
 
-    api.updateTranslationById(this.props.id);
-  };
-
-  render() {
     return (
-      <Update onClick={this.updateTranslation}>
-        <FontAwesomeIcon icon={faEdit} />
-      </Update>
-    );
-  }
-}
-
-class DeleteTranslation extends Component {
-  deleteTranslation = (event) => {
-    event.preventDefault();
-
-    if (
-      window.confirm(
-        `Do you want to delete the translation ${this.props.id} permanently?`
-      )
-    ) {
-      api.deleteTranslationById(this.props.id).then(() => {
-        // TODO fix
-        //this.props.updateTable();
-      });
-    }
-  };
-
-  render() {
-    return (
-      <Delete onClick={this.deleteTranslation}>
+      <Delete onClick={deleteTranslation}>
         <FontAwesomeIcon icon={faTrash} />
       </Delete>
     );
-  }
-}
+  };
 
-class Table extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      total: this.props.data.length,
-      translations: [],
-    };
-  }
-
-  renderTableHeader() {
-    return (
-      <Fragment>
-        <th>ID</th>
-        <th>Language</th>
-        <th>Timestamp</th>
-        <th></th>
-        <th></th>
-      </Fragment>
-    );
-  }
-
-  renderTableData() {
-    const sortedData = this.props.data.sort((a, b) =>
-      new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
-    );
-    return sortedData.map((translation, index) => {
+  // Show max. 10 latest translations
+  const TableData = () => {
+    return log.slice(0, 10).map((translation) => {
       const { _id, language, createdAt } = translation; //destructuring
       return (
         <tr key={_id}>
-          <td>{_id}</td>
-          <td>{language}</td>
           <td>
             <Moment format="MM/DD/YYYY HH:mm:ss">{createdAt}</Moment>
           </td>
+          <td>{language}</td>
           <td>
-            <DeleteTranslation
-              id={translation._id}
-              updateTable={this.props.updateTable}
-            />
+            <DeleteTranslation id={translation._id} language={language} />
           </td>
-          {/*<td>
-            <UpdateTranslation id={translation._id} />
-          </td>*/}
         </tr>
       );
     });
-  }
-
-  render() {
-    return (
-      <div>
-        <h4 id="title">Translation Log ({this.state.total})</h4>
-        <table className="table table-sm" id="translations">
-          <tbody>
-            <tr>{this.renderTableHeader()}</tr>
-            {this.renderTableData()}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-}
-
-class TranslationsList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      translations: this.props.translations || [],
-    };
-  }
-
-  componentDidMount = async () => {
-    await api.getAllTranslations().then((translations) => {
-      this.setState({
-        translations: translations.data.data,
-      });
-    });
   };
 
-  render() {
-    const { translations } = this.state;
-
-    let showTable = true;
-    if (!translations.length) {
-      showTable = false;
-    }
-
-    return (
-      <Fragment>
-        {showTable && (
-          <Table data={translations} updateTable={this.props.updateTable} />
-        )}
-      </Fragment>
-    );
-  }
-}
+  return (
+    <div>
+      <h4 id="title">Translation Log</h4>
+      <table className="table table-sm" id="translations">
+        <tbody>
+          <tr>
+            <th>Timestamp</th>
+            <th>Language</th>
+            <th></th>
+          </tr>
+          <TableData />
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 export default TranslationsList;

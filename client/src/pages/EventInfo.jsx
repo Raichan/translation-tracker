@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import api from "../api";
 
 import styled from "styled-components";
@@ -38,85 +38,75 @@ const CancelButton = styled(Link).attrs({
   text-decoration-color: none;
 `;
 
-class EventInfo extends Component {
-  constructor(props) {
-    super(props);
+const EventInfo = ({ eventid, updateState }) => {
+  const history = useHistory();
+  const [codefield, setCodefield] = useState("");
+  const [namefield, setNamefield] = useState("");
+  const [languagelist, setLanguagelist] = useState("");
 
-    this.state = {
-      newevent: this.props.eventcode === "" ? true : false,
-      eventcode: localStorage.getItem("eventcode") || "",
-      eventname: localStorage.getItem("eventname") || "",
-      languagelist:
-        localStorage.getItem("languages") !== null
-          ? localStorage.getItem("languages").replaceAll(",", ", ")
-          : "",
-    };
-  }
+  // On page load, load event info if editing an existing event
+  useEffect(() => {
+    api
+      .getEventById(eventid)
+      .then((res) => {
+        let result = res.data.data;
+        setCodefield(result["eventcode"]);
+        setNamefield(result["name"]);
+        setLanguagelist(result["languages"].join(", "));
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [eventid]);
 
-  handleChangeEventCode = async (event) => {
-    const eventcode = event.target.value;
-    this.setState({ eventcode });
-  };
-
-  handleChangeName = async (event) => {
-    const eventname = event.target.value;
-    this.setState({ eventname });
-  };
-
-  handleChangeLanguages = async (event) => {
-    const languagelist = event.target.value;
-    this.setState({ languagelist });
-  };
-
-  handleEditEvent = async () => {
-    const { eventcode, name, languagelist } = this.state;
-    const trimmedlist = languagelist.replace(" ", "");
+  const handleEditEvent = () => {
+    const trimmedlist = languagelist.replaceAll(" ", "");
     const languages = trimmedlist.split(",");
-    const payload = { eventcode, name, languages };
+    const payload = {
+      eventcode: codefield,
+      name: namefield,
+      languages: languages,
+    };
 
-    if (this.state.newevent) {
-      await api.insertEvent(payload).then((res) => {
-        window.location.href = "/";
+    if (eventid) {
+      api.updateEventById(eventid, payload).then((res) => {
+        console.log(res);
+        let result = res.data.data;
+        updateState(result._id, result.name, result.languages);
+        history.push("/translations");
       });
     } else {
-      await api
-        .updateEventById("5fad2c8d2deab00738abe62f", payload)
-        .then((res) => {
-          window.location.href = "/translations";
-        });
+      api.insertEvent(payload).then((res) => {
+        history.push("/");
+      });
     }
   };
 
-  render() {
-    const { eventcode, eventname, languagelist } = this.state;
-    return (
-      <Wrapper>
-        <Title>Edit event information</Title>
-        <Label>Event code: </Label>
-        <InputText
-          type="text"
-          value={eventcode}
-          onChange={this.handleChangeEventCode}
-        />
-        <Label>Name: </Label>
-        <InputText
-          type="text"
-          value={eventname}
-          onChange={this.handleChangeName}
-        />
-        <Label>Languages: </Label>
-        <InputText
-          type="text"
-          value={languagelist}
-          onChange={this.handleChangeLanguages}
-        />
-        <Button onClick={this.handleEditEvent}>Save event</Button>
-        <CancelButton to={this.state.newevent ? "/" : "/translations"}>
-          Cancel
-        </CancelButton>
-      </Wrapper>
-    );
-  }
-}
+  return (
+    <Wrapper>
+      <Title>{eventid ? "Edit event information" : "Create an event"}</Title>
+      <Label>Event code: </Label>
+      <InputText
+        type="text"
+        value={codefield}
+        onChange={(event) => setCodefield(event.target.value)}
+      />
+      <Label>Name: </Label>
+      <InputText
+        type="text"
+        value={namefield}
+        onChange={(event) => setNamefield(event.target.value)}
+      />
+      <Label>Languages: </Label>
+      <InputText
+        type="text"
+        value={languagelist}
+        onChange={(event) => setLanguagelist(event.target.value)}
+      />
+      <Button onClick={handleEditEvent}>Save event</Button>
+      <CancelButton to={eventid ? "/translations" : "/"}>Cancel</CancelButton>
+    </Wrapper>
+  );
+};
 
 export default EventInfo;

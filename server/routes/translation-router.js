@@ -8,5 +8,7 @@ router.put("/:id", TranslationCtrl.updateTranslation);
 router.delete("/:id", TranslationCtrl.deleteTranslation);
 router.get("/:id", TranslationCtrl.getTranslationById);
 router.get("/", TranslationCtrl.getTranslations);
+router.get("/totals/:id", TranslationCtrl.getLanguageTotals);
+router.post("/latest/:id", TranslationCtrl.getLatest);
 
 module.exports = router;

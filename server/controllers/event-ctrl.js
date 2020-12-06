@@ -58,7 +58,7 @@ updateEvent = async (req, res) => {
       .then(() => {
         return res.status(200).json({
           success: true,
-          id: event._id,
+          data: event,
           message: "Event updated!",
         });
       })

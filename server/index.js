@@ -19,8 +19,10 @@ app.use(express.json());
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
 const connection = mongoose.connection;
+const connected = " MongoDB not connected.";
 connection.once("open", () => {
-  console.log("MongoDB database connection established successfully");
+  connected = " MongoDB database connection established successfully.";
+  console.log(connected);
 });
 
 connection.on(
@@ -29,7 +31,7 @@ connection.on(
 );
 
 app.get("/", (req, res) => {
-  res.send("Translation tracker server is running!");
+  res.send("Translation tracker server is running!" + connected);
 });
 
 app.use("/events", eventRouter);

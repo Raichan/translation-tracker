@@ -4,7 +4,7 @@ import styled from "styled-components";
 import pokeball from "../pokeball.png"; // Source: purepng.com (CC0)
 
 const Wrapper = styled.a.attrs({
-  className: "navbar-brand",
+  className: "navbar-brand logo",
 })``;
 
 const Logo = () => {

@@ -9,7 +9,10 @@ const NavbarItem = styled.span`
   margin-right: 20px;
 `;
 
-const EventName = styled(Link)`
+const EventName = styled(Link).attrs({
+  className: "eventname",
+})`
+  margin: 20px;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.5);
 

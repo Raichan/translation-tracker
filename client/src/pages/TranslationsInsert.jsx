@@ -10,7 +10,7 @@ const ButtonsComponent = styled.div`
 `;
 
 const LanguageButtons = styled.div`
-  margin: 10px 0 0 10px;
+  margin: 10px 0 0 0px;
   text-align: center;
 `;
 

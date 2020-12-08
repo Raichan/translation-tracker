@@ -6,7 +6,7 @@ import apis from "../api";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  padding: 20px 200px 40px 200px;
+  padding: 20px 0;
 `;
 
 const TranslationsPage = ({

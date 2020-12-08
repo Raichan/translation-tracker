@@ -6,6 +6,12 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import styled from "styled-components";
 
+const Log = styled.div`
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 500px;
+`;
+
 const Delete = styled.div`
   color: #ff0000;
   cursor: pointer;
@@ -52,7 +58,7 @@ const TranslationsList = ({ log, updateTotal, removeFromLog }) => {
   };
 
   return (
-    <div>
+    <Log>
       <h4 id="title">Translation Log</h4>
       <table className="table table-sm" id="translations">
         <tbody>
@@ -64,7 +70,7 @@ const TranslationsList = ({ log, updateTotal, removeFromLog }) => {
           <TableData />
         </tbody>
       </table>
-    </div>
+    </Log>
   );
 };
 

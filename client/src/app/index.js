@@ -6,6 +6,7 @@ import { TranslationsPage, Login, EventInfo } from "../pages";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import apis from "../api";
+import "./app.css";
 
 const App = () => {
   const [eventid, setEventid] = useState("");

@@ -11,8 +11,9 @@ const Title = styled.h4.attrs({
 const Wrapper = styled.div.attrs({
   className: "form-group",
 })`
-  padding: 20px 200px 40px 200px;
-  margin: 0 30px;
+  padding: 20px 0;
+  max-width: 500px;
+  margin: 0 auto;
 `;
 
 const Label = styled.label`
@@ -85,19 +86,19 @@ const EventInfo = ({ eventid, updateState }) => {
   return (
     <Wrapper>
       <Title>{eventid ? "Edit event information" : "Create an event"}</Title>
-      <Label>Event code: </Label>
+      <Label>Event code </Label>
       <InputText
         type="text"
         value={codefield}
         onChange={(event) => setCodefield(event.target.value)}
       />
-      <Label>Name: </Label>
+      <Label>Name </Label>
       <InputText
         type="text"
         value={namefield}
         onChange={(event) => setNamefield(event.target.value)}
       />
-      <Label>Languages: </Label>
+      <Label>Languages </Label>
       <InputText
         type="text"
         value={languagelist}

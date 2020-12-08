@@ -19,7 +19,7 @@ app.use(express.json());
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
 const connection = mongoose.connection;
-const connected = " MongoDB not connected.";
+let connected = " MongoDB not connected.";
 connection.once("open", () => {
   connected = " MongoDB database connection established successfully.";
   console.log(connected);

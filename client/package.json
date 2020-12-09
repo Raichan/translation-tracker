@@ -1,7 +1,12 @@
 {
   "name": "client",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
+  "engines": {
+    "node": "12.16.1",
+    "npm": "6.14.8"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
@@ -9,6 +14,7 @@
     "@fortawesome/react-fontawesome": "^0.1.9",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
+    "express": "^4.17.1",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
     "react": "^16.13.0",
@@ -20,7 +26,7 @@
     "styled-components": "^5.0.1"
   },
   "scripts": {
-    "start": "PORT=8000 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test"
   },

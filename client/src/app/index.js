@@ -21,7 +21,6 @@ const App = () => {
   };
 
   const updateTotals = (id, languageList) => {
-    console.log("Getting language totals");
     apis
       .getLanguageTotals(id)
       .then((res) => {

@@ -1,27 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 
-import Logo from "./Logo";
+import Title from "./Title";
 import Links from "./Links";
 
-const Container = styled.div.attrs({
-  className: "container",
-})``;
-
 const Nav = styled.nav.attrs({
-  className: "navbar navbar-expand-lg navbar-dark",
+  className: "navbar navbar-dark",
 })`
   background-color: darkred;
 `;
 
 const NavBar = ({ eventname, logout }) => {
+  let links = <Links eventname={eventname} logout={logout} />;
+
   return (
-    <Container>
-      <Nav>
-        <Logo />
-        <Links eventname={eventname} logout={logout} />
-      </Nav>
-    </Container>
+    <Nav>
+      <Title />
+      {eventname !== "" ? links : ""}
+    </Nav>
   );
 };
 

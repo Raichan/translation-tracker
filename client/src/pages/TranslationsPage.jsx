@@ -17,18 +17,12 @@ const TranslationsPage = ({
 }) => {
   const [log, setLog] = useState([]);
 
-  useEffect(() => {
-    console.log(translations);
-  }, [translations]);
-
   // On load, fetch the log
   useEffect(() => {
-    console.log("Fetching the log");
     const payload = { n: 10 };
     apis
       .getLatest(eventid, payload)
       .then((res) => {
-        console.log(res.data.data);
         setLog(res.data.data);
       })
       .catch((err) => {

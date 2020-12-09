@@ -21,7 +21,14 @@ const InputText = styled.input.attrs({
   margin: 5px;
 `;
 
+const ErrorText = styled.div`
+  color: red;
+  margin: 20px;
+`;
+
 const Login = ({ updateState, updateTotals }) => {
+  const [error, setError] = useState("");
+
   const EventForm = () => {
     const history = useHistory();
     const [code, setCode] = useState("");
@@ -41,7 +48,10 @@ const Login = ({ updateState, updateTotals }) => {
 
           history.push("/translations");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          setError("Server connection failed. Try again later.");
+          console.log(err);
+        });
     };
 
     return (
@@ -65,6 +75,7 @@ const Login = ({ updateState, updateTotals }) => {
           New event
         </button>
       </Link>
+      {error !== "" ? <ErrorText>{error}</ErrorText> : ""}
     </Wrapper>
   );
 };

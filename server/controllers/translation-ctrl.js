@@ -1,7 +1,6 @@
 const Translation = require("../models/translation-model");
 
 createTranslation = (req, res) => {
-  console.log("Create translation");
   const body = req.body;
 
   if (!body) {

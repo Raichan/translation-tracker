@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -12,7 +12,6 @@ const NavbarItem = styled.span`
 const EventName = styled(Link).attrs({
   className: "eventname",
 })`
-  margin: 20px;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.5);
 
@@ -22,31 +21,24 @@ const EventName = styled(Link).attrs({
   }
 `;
 
-const Logout = styled.div`
+const Logout = styled.span`
   margin-left: auto;
 `;
 
 const Links = ({ eventname, logout }) => {
-  let logoutLink = (
-    <Logout>
-      <Link to="/" onClick={() => logout()}>
-        <NavbarItem>
-          <FontAwesomeIcon icon={faSignOutAlt} title="Log out" />
-        </NavbarItem>
-      </Link>
-    </Logout>
-  );
-
   return (
-    <Fragment>
-      <Link to="/" className="navbar-brand">
-        Pokémon Tournament Translation Tracker
-      </Link>
+    <div>
       <NavbarItem>
         <EventName to="/eventinfo">{eventname}</EventName>
       </NavbarItem>
-      {eventname !== "" ? logoutLink : ""}
-    </Fragment>
+      <Logout>
+        <Link to="/" onClick={() => logout()}>
+          <NavbarItem>
+            <FontAwesomeIcon icon={faSignOutAlt} title="Log out" />
+          </NavbarItem>
+        </Link>
+      </Logout>
+    </div>
   );
 };
 

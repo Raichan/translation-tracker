@@ -47,17 +47,19 @@ const EventInfo = ({ eventid, updateState }) => {
 
   // On page load, load event info if editing an existing event
   useEffect(() => {
-    api
-      .getEventById(eventid)
-      .then((res) => {
-        let result = res.data.data;
-        setCodefield(result["eventcode"]);
-        setNamefield(result["name"]);
-        setLanguagelist(result["languages"].join(", "));
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    if (eventid !== "") {
+      api
+        .getEventById(eventid)
+        .then((res) => {
+          let result = res.data.data;
+          setCodefield(result["eventcode"]);
+          setNamefield(result["name"]);
+          setLanguagelist(result["languages"].join(", "));
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }, [eventid]);
 
   const handleEditEvent = () => {
@@ -71,7 +73,6 @@ const EventInfo = ({ eventid, updateState }) => {
 
     if (eventid) {
       api.updateEventById(eventid, payload).then((res) => {
-        console.log(res);
         let result = res.data.data;
         updateState(result._id, result.name, result.languages);
         history.push("/translations");
@@ -90,6 +91,7 @@ const EventInfo = ({ eventid, updateState }) => {
       <InputText
         type="text"
         value={codefield}
+        disabled={eventid}
         onChange={(event) => setCodefield(event.target.value)}
       />
       <Label>Name </Label>

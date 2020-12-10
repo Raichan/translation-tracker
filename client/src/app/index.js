@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { NavBar } from "../components";
@@ -19,6 +19,10 @@ const App = () => {
     setEventname(name);
     setLanguages(langs);
   };
+
+  useEffect(() => {
+    updateTotals(eventid, languages);
+  }, [eventid, languages]);
 
   const updateTotals = (id, languageList) => {
     apis

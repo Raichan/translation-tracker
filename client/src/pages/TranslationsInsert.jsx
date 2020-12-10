@@ -38,7 +38,6 @@ const TranslationsInsert = ({
         .insertTranslation(payload)
         .then((res) => {
           updateTotal(language, 1);
-          console.log(res);
           addToLog(res.data.data);
         })
         .catch((err) => {
@@ -74,7 +73,7 @@ const TranslationsInsert = ({
           key={lang}
           eventid={eventid}
           language={lang}
-          total={translations[lang]}
+          total={translations[lang] || 0}
         />
       ))}
     </ButtonsComponent>

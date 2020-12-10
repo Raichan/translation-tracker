@@ -9,13 +9,10 @@ createEvent = (req, res) => {
       error: "Event information missing",
     });
   }
-
   const event = new Event(body);
-
   if (!event) {
     return res.status(400).json({ success: false, error: err });
   }
-
   event
     .save()
     .then(() => {

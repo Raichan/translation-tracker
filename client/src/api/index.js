@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const url =
+  process.env.NODE_ENV === "production"
+    ? "http://translation-tracker-api.herokuapp.com/"
+    : "http://localhost:5000/";
 const api = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: url,
 });
 
 export const insertTranslation = (payload) =>

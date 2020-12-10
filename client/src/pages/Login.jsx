@@ -44,7 +44,6 @@ const Login = ({ updateState, updateTotals }) => {
         .then((eventInfo) => {
           let result = eventInfo.data.data;
           updateState(result._id, result.name, result.languages);
-          updateTotals(result._id, result.languages);
 
           history.push("/translations");
         })

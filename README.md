@@ -1,6 +1,6 @@
 # Translation Tracker
 
-A counter tool with multiple, customizable counters. Originally built for tracking translation requests for different languages at Pokémon World Championships and other international Pokémon card game & video game tournaments.
+A counter tool with multiple, customizable counters, built for tracking translation requests for different languages at Pokémon World Championships and other international Pokémon card game & video game tournaments.
 
 Built with MongoDB, Express.js, React and Node.js.
 
@@ -20,9 +20,9 @@ To track the workload of translators, the team keeps a pen and paper tally of ho
 
 ## Status
 
-Minimum viable product, fills the requirements but could use plenty of improvements, including but not limited to:
+Functional basic version, fills the requirements but could use plenty of improvements, including but not limited to:
 
-- Better responsive navbar
+- Fix occasional deletion bug
 - Automatic login on page refresh
 - More modern way to edit used languages
 - Admin panel to manage all events in the database
@@ -30,4 +30,4 @@ Minimum viable product, fills the requirements but could use plenty of improveme
 
 ## Demo
 
-Hopefully coming soon.
+Running at http://translation-tracker.herokuapp.com/.
